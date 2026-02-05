@@ -40,7 +40,7 @@ void setup() {
                   res2.ok() ? "OK" : res2.message(),
                   usedDefault ? "default" : "stored");
 
-    serializeJsonPretty(Serial, res2.data);
+    serializeJsonPretty(res2.data, Serial);
 }
 
 void loop() {}

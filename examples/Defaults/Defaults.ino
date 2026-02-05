@@ -30,7 +30,7 @@ void setup() {
     }
 
     Serial.printf("Config source: %s\n", usedDefault ? "default" : "stored");
-    serializeJsonPretty(Serial, res.data);
+    serializeJsonPretty(res.data, Serial);
 }
 
 void loop() {}

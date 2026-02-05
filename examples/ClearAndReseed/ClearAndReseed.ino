@@ -37,7 +37,7 @@ void setup() {
                   res.ok() ? "OK" : res.message(),
                   usedDefault ? "default" : "stored");
 
-    serializeJsonPretty(Serial, res.data);
+    serializeJsonPretty(res.data, Serial);
 }
 
 void loop() {}

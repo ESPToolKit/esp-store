@@ -28,7 +28,7 @@ void setup() {
         return;
     }
 
-    serializeJsonPretty(Serial, res.data);
+    serializeJsonPretty(res.data, Serial);
 }
 
 void loop() {}
