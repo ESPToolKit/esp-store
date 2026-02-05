@@ -1,0 +1,39 @@
+{
+  "name": "ESPStore",
+  "version": "1.0.0",
+  "description": "Single-document key/value store for ESP32 built on ESPJsonDB.",
+  "keywords": [
+    "esp32",
+    "arduino",
+    "json",
+    "store",
+    "config",
+    "storage",
+    "key-value"
+  ],
+  "homepage": "https://github.com/ESPToolKit/esp-store",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ESPToolKit/esp-store.git"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "zekageri"
+    }
+  ],
+  "frameworks": ["arduino"],
+  "platforms": ["espressif32"],
+  "dependencies": [
+    {
+      "name": "ESPJsonDB",
+      "version": "https://github.com/ESPToolKit/esp-jsondb.git"
+    }
+  ],
+  "headers": ["ESPStore.h", "ESPStoreCodec.h"],
+  "build": {
+    "flags": [
+      "-std=gnu++17"
+    ]
+  }
+}
