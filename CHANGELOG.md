@@ -11,6 +11,8 @@ The format follows Keep a Changelog and the project adheres to Semantic Versioni
 - Added LocalDateTime codec example using `{ epochSeconds, offsetMinutes }`.
 - Added `ESPStoreCodec::decodeLocalDateTime` helper.
 - Added `ESPStoreCodec::encodeLocalDateTime` helper.
+- Added `init(db, collection, key)` overloads so multiple `ESPStore` instances can share one collection safely with unique keys.
+- Changed `clear()` to remove only the current store key instead of dropping the entire collection.
 
 ## [1.0.0] - 2026-02-05
 ### Added

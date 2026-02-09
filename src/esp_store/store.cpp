@@ -2,25 +2,37 @@
 
 static const char *kErrNotReady = "store not initialized";
 static const char *kErrBadCollection = "invalid collection";
+static const char *kErrBadKey = "invalid key";
 static const char *kErrValueMissing = "stored value missing";
 static const char *kMsgDefaultUsed = "default value used";
 
 DbStatus ESPStore::init(ESPJsonDB *db, const char *collection) {
-	if (!db || !collection || !*collection) {
-		return {DbStatusCode::InvalidArgument, kErrBadCollection};
-	}
-	_db = db;
-	_collection = collection;
-	_key = collection;
-	return registerSchema();
+	return init(db, collection, collection);
 }
 
 DbStatus ESPStore::init(ESPJsonDB *db, const String &collection) {
-	return init(db, collection.c_str());
+	return init(db, collection.c_str(), collection.c_str());
+}
+
+DbStatus ESPStore::init(ESPJsonDB *db, const char *collection, const char *key) {
+	if (!db || !collection || !*collection) {
+		return {DbStatusCode::InvalidArgument, kErrBadCollection};
+	}
+	if (!key || !*key) {
+		return {DbStatusCode::InvalidArgument, kErrBadKey};
+	}
+	_db = db;
+	_collection = collection;
+	_key = key;
+	return registerSchema();
+}
+
+DbStatus ESPStore::init(ESPJsonDB *db, const String &collection, const String &key) {
+	return init(db, collection.c_str(), key.c_str());
 }
 
 DbStatus ESPStore::ensureReady() const {
-	if (!_db || _collection.empty()) {
+	if (!_db || _collection.empty() || _key.empty()) {
 		return {DbStatusCode::InvalidArgument, kErrNotReady};
 	}
 	return {DbStatusCode::Ok, ""};
@@ -113,7 +125,10 @@ DbStatus ESPStore::set(JsonVariantConst value) {
 DbStatus ESPStore::clear() {
 	auto ready = ensureReady();
 	if (!ready.ok()) return ready;
-	return _db->dropCollection(_collection);
+	auto removed = _db->removeMany(_collection, [this](const DocView &doc) {
+		return doc["key"].as<std::string>() == _key;
+	});
+	return removed.status;
 }
 
 DbStatus ESPStore::syncNow() {

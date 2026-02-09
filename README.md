@@ -1,8 +1,8 @@
 # ESPStore
 
-ESPStore is a tiny, single-document key/value store built on top of ESPJsonDB. It is designed for **simple configuration blobs** (network settings, device settings, calibration data) where you just want `get()` / `set()` without worrying about keys or IDs.
+ESPStore is a tiny key/value store built on top of ESPJsonDB. It is designed for **simple configuration blobs** (network settings, device settings, calibration data) where you just want `get()` / `set()` without managing document IDs directly.
 
-Each `ESPStore` instance maps to one ESPJsonDB collection and stores exactly **one document** keyed by the collection name.
+Each `ESPStore` instance maps to one ESPJsonDB collection and one store `key`. By default the key is the collection name, but you can pass a custom key to keep multiple stores in the same collection without overwriting each other.
 
 ## CI / Release / License
 [![CI](https://github.com/ESPToolKit/esp-store/actions/workflows/ci.yml/badge.svg)](https://github.com/ESPToolKit/esp-store/actions/workflows/ci.yml)
@@ -10,7 +10,7 @@ Each `ESPStore` instance maps to one ESPJsonDB collection and stores exactly **o
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
 
 ## Features
-- Single-document store per collection: simple `get()` and `set()` APIs.
+- Single-document store per key: simple `get()` and `set()` APIs.
 - Built on ESPJsonDB, so autosync and filesystem management are already handled.
 - `getOr(...)` helper to return safe defaults when the stored value is missing.
 - `setDefault(...)` lets you define defaults before or after `init()`.
@@ -34,7 +34,7 @@ void setup() {
         return;
     }
 
-    netConf.init(&db, "netConf");
+    netConf.init(&db, "netConf", "wifi");
 
     JsonDocument cfg;
     cfg["ssid"] = "MyWiFi";
@@ -54,6 +54,18 @@ void setup() {
 }
 ```
 
+## Multiple Stores In One Collection
+
+```cpp
+ESPStore testStore;
+ESPStore exampleStore;
+
+testStore.init(&db, "settings", "test");
+exampleStore.init(&db, "settings", "example");
+```
+
+Both stores use the same `settings` collection, but each instance reads/writes only its own key.
+
 ## Defaults with getOr
 
 ```cpp
@@ -72,12 +84,15 @@ if (res.ok()) {
 
 ## API Summary
 - `DbStatus init(ESPJsonDB* db, const char* collection)`
+- `DbStatus init(ESPJsonDB* db, const String& collection)`
+- `DbStatus init(ESPJsonDB* db, const char* collection, const char* key)`
+- `DbStatus init(ESPJsonDB* db, const String& collection, const String& key)`
 - `StoreResponse get()`
 - `DbStatus setDefault(JsonVariantConst value)`
 - `StoreResponse getOr(bool* usedDefault = nullptr)`
 - `StoreResponse getOr(JsonVariantConst fallback, bool* usedDefault = nullptr)`
 - `DbStatus set(JsonVariantConst value)`
-- `DbStatus clear()`
+- `DbStatus clear()` (removes only this store key from its collection)
 - `DbStatus syncNow()`
 
 ## ESPStoreCodec (IP + Date helpers)
