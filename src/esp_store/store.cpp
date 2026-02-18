@@ -54,7 +54,7 @@ DbStatus ESPStore::setDefault(JsonVariantConst value) {
 }
 
 StoreResponse ESPStore::get() {
-	StoreResponse res{};
+	StoreResponse res;
 	auto ready = ensureReady();
 	if (!ready.ok()) {
 		res.setStatus(ready);

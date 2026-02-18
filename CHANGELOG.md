@@ -13,6 +13,7 @@ The format follows Keep a Changelog and the project adheres to Semantic Versioni
 - Added `ESPStoreCodec::encodeLocalDateTime` helper.
 - Added `init(db, collection, key)` overloads so multiple `ESPStore` instances can share one collection safely with unique keys.
 - Changed `clear()` to remove only the current store key instead of dropping the entire collection.
+- Fixed ArduinoJson v7 explicit-constructor warning in `get()` by avoiding brace aggregate initialization of `StoreResponse`.
 
 ## [1.0.0] - 2026-02-05
 ### Added
