@@ -28,6 +28,10 @@
     {
       "name": "ESPJsonDB",
       "version": "https://github.com/ESPToolKit/esp-jsondb.git"
+    },
+    {
+      "name": "ESPBufferManager",
+      "version": "https://github.com/ESPToolKit/esp-buffer-manager.git"
     }
   ],
   "headers": ["ESPStore.h", "ESPStoreCodec.h"],
