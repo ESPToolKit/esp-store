@@ -22,17 +22,41 @@ DbStatus ESPStore::init(ESPJsonDB *db, const char *collection, const char *key) 
 		return {DbStatusCode::InvalidArgument, kErrBadKey};
 	}
 	_db = db;
-	_collection = collection;
-	_key = key;
-	return registerSchema();
+	_collection.assign(collection);
+	_key.assign(key);
+	_initialized = false;
+
+	const DbStatus st = registerSchema();
+	if (!st.ok()) {
+		_db = nullptr;
+		_collection.clear();
+		_key.clear();
+		return st;
+	}
+
+	_initialized = true;
+	return st;
 }
 
 DbStatus ESPStore::init(ESPJsonDB *db, const String &collection, const String &key) {
 	return init(db, collection.c_str(), key.c_str());
 }
 
+void ESPStore::deinit() {
+	if (!_initialized && _db == nullptr && _collection.empty() && _key.empty() && !_hasDefault) {
+		return;
+	}
+
+	_db = nullptr;
+	_initialized = false;
+	std::string().swap(_collection);
+	std::string().swap(_key);
+	_defaultDoc = JsonDocument();
+	_hasDefault = false;
+}
+
 DbStatus ESPStore::ensureReady() const {
-	if (!_db || _collection.empty() || _key.empty()) {
+	if (!_initialized || !_db || _collection.empty() || _key.empty()) {
 		return {DbStatusCode::InvalidArgument, kErrNotReady};
 	}
 	return {DbStatusCode::Ok, ""};

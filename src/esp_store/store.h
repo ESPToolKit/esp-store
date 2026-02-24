@@ -23,11 +23,14 @@ struct StoreResponse {
 class ESPStore {
   public:
 	ESPStore() = default;
+	~ESPStore() { deinit(); }
 
 	DbStatus init(ESPJsonDB *db, const char *collection);
 	DbStatus init(ESPJsonDB *db, const String &collection);
 	DbStatus init(ESPJsonDB *db, const char *collection, const char *key);
 	DbStatus init(ESPJsonDB *db, const String &collection, const String &key);
+	void deinit();
+	bool isInitialized() const { return _initialized; }
 
 	DbStatus setDefault(JsonVariantConst value);
 	StoreResponse get();
@@ -38,7 +41,6 @@ class ESPStore {
 	DbStatus clear();
 	DbStatus syncNow();
 
-	bool ready() const { return _db != nullptr && !_collection.empty() && !_key.empty(); }
 	const std::string &collection() const { return _collection; }
 	const std::string &key() const { return _key; }
 
@@ -48,6 +50,7 @@ class ESPStore {
 	std::string _key;
 	JsonDocument _defaultDoc;
 	bool _hasDefault = false;
+	bool _initialized = false;
 
 	DbStatus ensureReady() const;
 	DbStatus registerSchema();

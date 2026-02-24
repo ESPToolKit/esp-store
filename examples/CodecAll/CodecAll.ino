@@ -62,6 +62,8 @@ void setup() {
                       static_cast<long long>(localDecoded.utc.epochSeconds),
                       localDecoded.offsetMinutes);
     }
+
+    store.deinit();
 }
 
 void loop() {}

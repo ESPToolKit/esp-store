@@ -51,6 +51,7 @@ void setup() {
     }
 
     serializeJsonPretty(Serial, res.data);
+    netConf.deinit();
 }
 ```
 
@@ -87,6 +88,8 @@ if (res.ok()) {
 - `DbStatus init(ESPJsonDB* db, const String& collection)`
 - `DbStatus init(ESPJsonDB* db, const char* collection, const char* key)`
 - `DbStatus init(ESPJsonDB* db, const String& collection, const String& key)`
+- `void deinit()` (safe before `init()`, idempotent)
+- `bool isInitialized() const`
 - `StoreResponse get()`
 - `DbStatus setDefault(JsonVariantConst value)`
 - `StoreResponse getOr(bool* usedDefault = nullptr)`

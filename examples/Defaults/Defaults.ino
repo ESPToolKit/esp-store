@@ -31,6 +31,7 @@ void setup() {
 
     Serial.printf("Config source: %s\n", usedDefault ? "default" : "stored");
     serializeJsonPretty(res.data, Serial);
+    netConf.deinit();
 }
 
 void loop() {}
