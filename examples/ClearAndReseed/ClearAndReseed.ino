@@ -38,6 +38,7 @@ void setup() {
                   usedDefault ? "default" : "stored");
 
     serializeJsonPretty(res.data, Serial);
+    store.deinit();
 }
 
 void loop() {}

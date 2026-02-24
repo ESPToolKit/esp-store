@@ -41,6 +41,7 @@ void setup() {
                   usedDefault ? "default" : "stored");
 
     serializeJsonPretty(res2.data, Serial);
+    netConf.deinit();
 }
 
 void loop() {}

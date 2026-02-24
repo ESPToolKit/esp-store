@@ -38,6 +38,7 @@ void setup() {
 
     Serial.printf("Loaded epoch: %lld\n", static_cast<long long>(loaded.utc.epochSeconds));
     Serial.printf("Loaded offset minutes: %d\n", loaded.offsetMinutes);
+    store.deinit();
 }
 
 void loop() {}
