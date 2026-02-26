@@ -138,8 +138,9 @@ LocalDateTime local{};
 ESPStoreCodec::encodeLocalDateTime(doc["localTime"], local);
 if (ESPStoreCodec::decodeLocalDateTime(doc["localTime"], local)) {
     Serial.printf("Epoch: %lld offset: %d\n",
-                  static_cast<long long>(local.utc.epochSeconds),
-                  local.offsetMinutes);
+        static_cast<long long>(local.utc.epochSeconds),
+        local.offsetMinutes
+    );
 }
 ```
 
