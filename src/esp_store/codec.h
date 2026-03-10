@@ -34,7 +34,8 @@ class ESPStoreCodec {
 	}
 
 	static bool decodeIpString(JsonVariantConst src, IPAddress &out) {
-		if (src.isNull()) return false;
+		if (src.isNull())
+			return false;
 		const char *str = nullptr;
 		if (src.is<const char *>()) {
 			str = src.as<const char *>();
@@ -43,20 +44,25 @@ class ESPStoreCodec {
 		} else {
 			return false;
 		}
-		if (!str || !*str) return false;
+		if (!str || !*str)
+			return false;
 		return out.fromString(str);
 	}
 
 	static bool decodeIpArray(JsonVariantConst src, IPAddress &out) {
-		if (!src.is<JsonArrayConst>()) return false;
+		if (!src.is<JsonArrayConst>())
+			return false;
 		JsonArrayConst arr = src.as<JsonArrayConst>();
-		if (arr.size() != 4) return false;
+		if (arr.size() != 4)
+			return false;
 		uint8_t octets[4];
 		for (size_t i = 0; i < 4; ++i) {
 			JsonVariantConst v = arr[i];
-			if (!v.is<uint8_t>() && !v.is<int>()) return false;
+			if (!v.is<uint8_t>() && !v.is<int>())
+				return false;
 			int val = v.as<int>();
-			if (val < 0 || val > 255) return false;
+			if (val < 0 || val > 255)
+				return false;
 			octets[i] = static_cast<uint8_t>(val);
 		}
 		out = IPAddress(octets[0], octets[1], octets[2], octets[3]);
@@ -64,7 +70,8 @@ class ESPStoreCodec {
 	}
 
 	static bool decodeIp(JsonVariantConst src, IPAddress &out) {
-		if (decodeIpString(src, out)) return true;
+		if (decodeIpString(src, out))
+			return true;
 		return decodeIpArray(src, out);
 	}
 
@@ -74,8 +81,10 @@ class ESPStoreCodec {
 	}
 
 	static bool decodeEpochSeconds(JsonVariantConst src, int64_t &out) {
-		if (src.isNull()) return false;
-		if (!(src.is<int64_t>() || src.is<long>() || src.is<int>())) return false;
+		if (src.isNull())
+			return false;
+		if (!(src.is<int64_t>() || src.is<long>() || src.is<int>()))
+			return false;
 		out = src.as<int64_t>();
 		return true;
 	}
@@ -87,20 +96,23 @@ class ESPStoreCodec {
 
 	static bool decodeDateTimeEpoch(JsonVariantConst src, DateTime &out) {
 		int64_t epoch = 0;
-		if (!decodeEpochSeconds(src, epoch)) return false;
+		if (!decodeEpochSeconds(src, epoch))
+			return false;
 		out.epochSeconds = epoch;
 		return true;
 	}
 
 	static bool encodeDateTimeIso(JsonVariant dst, const DateTime &dt, ESPDate &date) {
 		char buf[32];
-		if (!date.formatUtc(dt, ESPDateFormat::Iso8601, buf, sizeof(buf))) return false;
+		if (!date.formatUtc(dt, ESPDateFormat::Iso8601, buf, sizeof(buf)))
+			return false;
 		dst.set(buf);
 		return true;
 	}
 
 	static bool decodeDateTimeIso(JsonVariantConst src, DateTime &out, ESPDate &date) {
-		if (src.isNull()) return false;
+		if (src.isNull())
+			return false;
 		const char *str = nullptr;
 		if (src.is<const char *>()) {
 			str = src.as<const char *>();
@@ -109,9 +121,11 @@ class ESPStoreCodec {
 		} else {
 			return false;
 		}
-		if (!str || !*str) return false;
+		if (!str || !*str)
+			return false;
 		auto parsed = date.parseIso8601Utc(str);
-		if (!parsed.ok) return false;
+		if (!parsed.ok)
+			return false;
 		out = parsed.value;
 		return true;
 	}
@@ -125,11 +139,14 @@ class ESPStoreCodec {
 	}
 
 	static bool decodeLocalDateTime(JsonVariantConst src, LocalDateTime &out) {
-		if (!src.is<JsonObjectConst>()) return false;
+		if (!src.is<JsonObjectConst>())
+			return false;
 		JsonObjectConst obj = src.as<JsonObjectConst>();
-		if (!obj.containsKey("epochSeconds") || !obj.containsKey("offsetMinutes")) return false;
+		if (!obj.containsKey("epochSeconds") || !obj.containsKey("offsetMinutes"))
+			return false;
 		int64_t epoch = 0;
-		if (!decodeEpochSeconds(obj["epochSeconds"], epoch)) return false;
+		if (!decodeEpochSeconds(obj["epochSeconds"], epoch))
+			return false;
 		out.utc.epochSeconds = epoch;
 		out.offsetMinutes = obj["offsetMinutes"].as<int>();
 		out.ok = true;
