@@ -152,6 +152,13 @@ if (ESPStoreCodec::decodeLocalDateTime(doc["localTime"], local)) {
 - `examples/ClearAndReseed` – clear the store and seed with defaults.
 - `examples/LocalDateTime` – store LocalDateTime as `{ epochSeconds, offsetMinutes }`.
 
+## Formatting Baseline
+
+This repository follows the firmware formatting baseline from `esptoolkit-template`:
+- `.clang-format` is the source of truth for C/C++/INO layout.
+- `.editorconfig` enforces tabs (`tab_width = 4`), LF endings, and final newline.
+- Format all tracked firmware sources with `bash scripts/format_cpp.sh`.
+
 ## License
 MIT — see [LICENSE.md](LICENSE.md).
 

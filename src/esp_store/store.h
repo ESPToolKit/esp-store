@@ -11,8 +11,12 @@ struct StoreResponse {
 	JsonDocument data;
 	const char *error = nullptr;
 
-	bool ok() const { return status.ok(); }
-	const char *message() const { return status.message; }
+	bool ok() const {
+		return status.ok();
+	}
+	const char *message() const {
+		return status.message;
+	}
 
 	void setStatus(const DbStatus &st) {
 		status = st;
@@ -23,14 +27,18 @@ struct StoreResponse {
 class ESPStore {
   public:
 	ESPStore() = default;
-	~ESPStore() { deinit(); }
+	~ESPStore() {
+		deinit();
+	}
 
 	DbStatus init(ESPJsonDB *db, const char *collection);
 	DbStatus init(ESPJsonDB *db, const String &collection);
 	DbStatus init(ESPJsonDB *db, const char *collection, const char *key);
 	DbStatus init(ESPJsonDB *db, const String &collection, const String &key);
 	void deinit();
-	bool isInitialized() const { return _initialized; }
+	bool isInitialized() const {
+		return _initialized;
+	}
 
 	DbStatus setDefault(JsonVariantConst value);
 	StoreResponse get();
@@ -41,8 +49,12 @@ class ESPStore {
 	DbStatus clear();
 	DbStatus syncNow();
 
-	const std::string &collection() const { return _collection; }
-	const std::string &key() const { return _key; }
+	const std::string &collection() const {
+		return _collection;
+	}
+	const std::string &key() const {
+		return _key;
+	}
 
   private:
 	ESPJsonDB *_db = nullptr;

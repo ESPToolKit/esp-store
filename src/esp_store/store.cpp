@@ -65,7 +65,7 @@ DbStatus ESPStore::ensureReady() const {
 DbStatus ESPStore::registerSchema() {
 	Schema s;
 	s.fields = {
-		{"key", FieldType::String, nullptr, true},
+	    {"key", FieldType::String, nullptr, true},
 	};
 	return _db->registerSchema(_collection, s);
 }
@@ -107,7 +107,8 @@ StoreResponse ESPStore::get() {
 StoreResponse ESPStore::getOr(bool *usedDefault) {
 	if (!_hasDefault) {
 		auto res = get();
-		if (usedDefault) *usedDefault = false;
+		if (usedDefault)
+			*usedDefault = false;
 		return res;
 	}
 	return getOr(_defaultDoc.as<JsonVariantConst>(), usedDefault);
@@ -116,7 +117,8 @@ StoreResponse ESPStore::getOr(bool *usedDefault) {
 StoreResponse ESPStore::getOr(JsonVariantConst fallback, bool *usedDefault) {
 	StoreResponse res = get();
 	if (res.ok()) {
-		if (usedDefault) *usedDefault = false;
+		if (usedDefault)
+			*usedDefault = false;
 		return res;
 	}
 
@@ -124,17 +126,20 @@ StoreResponse ESPStore::getOr(JsonVariantConst fallback, bool *usedDefault) {
 		res.data.clear();
 		res.data.set(fallback);
 		res.setStatus({DbStatusCode::Ok, kMsgDefaultUsed});
-		if (usedDefault) *usedDefault = true;
+		if (usedDefault)
+			*usedDefault = true;
 		return res;
 	}
 
-	if (usedDefault) *usedDefault = false;
+	if (usedDefault)
+		*usedDefault = false;
 	return res;
 }
 
 DbStatus ESPStore::set(JsonVariantConst value) {
 	auto ready = ensureReady();
-	if (!ready.ok()) return ready;
+	if (!ready.ok())
+		return ready;
 
 	JsonDocument filter;
 	filter["key"] = _key.c_str();
@@ -148,7 +153,8 @@ DbStatus ESPStore::set(JsonVariantConst value) {
 
 DbStatus ESPStore::clear() {
 	auto ready = ensureReady();
-	if (!ready.ok()) return ready;
+	if (!ready.ok())
+		return ready;
 	auto removed = _db->removeMany(_collection, [this](const DocView &doc) {
 		return doc["key"].as<std::string>() == _key;
 	});
@@ -157,6 +163,7 @@ DbStatus ESPStore::clear() {
 
 DbStatus ESPStore::syncNow() {
 	auto ready = ensureReady();
-	if (!ready.ok()) return ready;
+	if (!ready.ok())
+		return ready;
 	return _db->syncNow();
 }
