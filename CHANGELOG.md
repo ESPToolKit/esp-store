@@ -5,6 +5,7 @@ All notable changes to this project are documented in this file.
 The format follows Keep a Changelog and the project adheres to Semantic Versioning.
 
 ## [Unreleased]
+- CI now pins PIOArduino Core to `v6.1.19` and installs the ESP32 platform via `pio pkg install`, restoring PlatformIO compatibility with the current `platform-espressif32` package.
 - Added teardown contract support with `deinit()`, `isInitialized()`, and destructor-driven cleanup.
 - Added lifecycle tests covering pre-init `deinit()`, repeated `deinit()`, and `init -> deinit -> init`.
 - Updated README and examples to use explicit `deinit()`.
